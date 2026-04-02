@@ -17,10 +17,9 @@ CineWatch Pro is a high-performance web application that combines **Machine Lear
 * **Deployment:** Streamlit Community Cloud
 
 ## 📸 Screenshots
-*(Tip: Add your best app screenshot here by uploading it to GitHub and linking it)*
+
 ![App Preview](https://github.com/mohdabrarbaloch-arch/movie-recommender-pro/raw/main/screenshot.png)
 
 ## 📦 How to Run Locally
-1. Clone the repository:
-   ```bash
+      
    git clone [https://github.com/mohdabrarbaloch-arch/movie-recommender-pro.git](https://github.com/mohdabrarbaloch-arch/movie-recommender-pro.git)
