@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+node_modules/
+movie_cache.json
+test_*.py
+users.csv
+.DS_Store
+Thumbs.db
