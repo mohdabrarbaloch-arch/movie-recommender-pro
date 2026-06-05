@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
-const API = "http://127.0.0.1:8000";
+const API = process.env.NODE_ENV === "production" ? "" : "http://127.0.0.1:8000";
 
 const GENRES = [
   "All", "Action", "Adventure", "Animation", "Comedy", "Crime",

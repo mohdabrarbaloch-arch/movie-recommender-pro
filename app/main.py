@@ -1,7 +1,10 @@
 import os
+from pathlib import Path
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -300,3 +303,10 @@ def home_page():
         if movies:
             result["sections"].append({"genre": g, "movies": movies})
     return result
+
+BUILD_DIR = Path(__file__).parent.parent / "frontend" / "build"
+if BUILD_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(BUILD_DIR / "static")), name="static")
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        return FileResponse(str(BUILD_DIR / "index.html"))
