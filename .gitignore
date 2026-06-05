@@ -2,7 +2,6 @@
 __pycache__/
 *.pyc
 node_modules/
-frontend/build/
 movie_cache.json
 test_*.py
 users.csv
