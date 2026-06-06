@@ -1,10 +1,5 @@
 {
-  "builds": [
-    { "src": "api/**", "use": "@vercel/python" },
-    { "src": "frontend/build/**", "use": "@vercel/static" }
-  ],
   "rewrites": [
-    { "source": "/static/(.*)", "destination": "/frontend/build/static/$1" },
     { "source": "/(.*)", "destination": "/api/index" }
   ]
 }
