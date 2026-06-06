@@ -304,9 +304,16 @@ def home_page():
             result["sections"].append({"genre": g, "movies": movies})
     return result
 
-BUILD_DIR = Path(__file__).parent.parent / "frontend" / "build"
-if BUILD_DIR.exists():
-    app.mount("/static", StaticFiles(directory=str(BUILD_DIR / "static")), name="static")
+FRONTEND_BUILD = None
+for p in [Path(__file__).parent.parent / "frontend" / "build",
+          Path(os.getcwd()) / "frontend" / "build",
+          Path("frontend") / "build"]:
+    if (p / "index.html").exists():
+        FRONTEND_BUILD = p
+        break
+
+if FRONTEND_BUILD:
+    app.mount("/static", StaticFiles(directory=str(FRONTEND_BUILD / "static")), name="static")
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        return FileResponse(str(BUILD_DIR / "index.html"))
+        return FileResponse(str(FRONTEND_BUILD / "index.html"))
