@@ -115,7 +115,9 @@ def build_tv(t):
     return item
 
 @app.get("/")
-def index():
+async def index():
+    if FRONTEND_BUILD:
+        return FileResponse(str(FRONTEND_BUILD / "index.html"))
     return {"message": "MovieBox API - Powered by TMDB"}
 
 @app.get("/search")
