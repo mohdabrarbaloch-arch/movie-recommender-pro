@@ -7,3 +7,4 @@ test_*.py
 users.csv
 .DS_Store
 Thumbs.db
+.vercel
