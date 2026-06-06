@@ -1,0 +1,7 @@
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+from app.main import app as asgi_app
+from asgiref.wsgi import AsgiToWsgi
+
+app = AsgiToWsgi(asgi_app)
