@@ -11,6 +11,7 @@
     { "source": "/music", "destination": "/api/index" },
     { "source": "/short-videos", "destination": "/api/index" },
     { "source": "/hero-content", "destination": "/api/index" },
-    { "source": "/all-movies", "destination": "/api/index" }
+    { "source": "/all-movies", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/404.html" }
   ]
 }
