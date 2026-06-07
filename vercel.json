@@ -1,17 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/home", "destination": "/api/index" },
-    { "source": "/search", "destination": "/api/index" },
-    { "source": "/trending", "destination": "/api/index" },
-    { "source": "/movie/(.*)", "destination": "/api/index" },
-    { "source": "/tv/(.*)", "destination": "/api/index" },
-    { "source": "/genre/(.*)", "destination": "/api/index" },
-    { "source": "/recommendations/(.*)", "destination": "/api/index" },
-    { "source": "/music", "destination": "/api/index" },
-    { "source": "/short-videos", "destination": "/api/index" },
-    { "source": "/hero-content", "destination": "/api/index" },
-    { "source": "/all-movies", "destination": "/api/index" },
-    { "source": "/(.*)", "destination": "/404.html" }
+    { "source": "/(.*)", "destination": "/api/index" }
   ]
 }

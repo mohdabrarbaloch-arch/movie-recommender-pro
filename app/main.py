@@ -2,6 +2,8 @@ import os
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,6 +24,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+FRONTEND_BUILD = None
+for p in [Path(__file__).parent.parent / "frontend" / "build",
+          Path(os.getcwd()) / "frontend" / "build",
+          Path("frontend") / "build",
+          Path(os.getcwd()) / "public"]:
+    if p.exists() and (p / "index.html").exists():
+        FRONTEND_BUILD = p
+        break
 
 GENRE_IDS = {
     "Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35,
@@ -428,5 +439,16 @@ def home_page():
                 result["sections"].append({"genre": g, "movies": movies})
         return result
     return get_fallback_home()
+
+@app.get("/")
+async def index():
+    if FRONTEND_BUILD:
+        return FileResponse(str(FRONTEND_BUILD / "index.html"))
+    return {"message": "MovieBox API - Live"}
+
+if FRONTEND_BUILD:
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        return FileResponse(str(FRONTEND_BUILD / "index.html"))
 
 
