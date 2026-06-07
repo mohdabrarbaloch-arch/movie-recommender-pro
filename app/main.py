@@ -2,6 +2,8 @@ import os
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -276,9 +278,14 @@ def build_tv(t):
     }
     return item
 
+PUBLIC_DIR = Path(__file__).parent.parent / "public"
+
 @app.get("/")
 async def index():
-    return {"message": "MovieBox API - Live", "note": "frontend at /index.html"}
+    idx = PUBLIC_DIR / "index.html"
+    if idx.exists():
+        return FileResponse(str(idx))
+    return {"message": "MovieBox API - Live"}
 
 @app.get("/search")
 def search(q: str = "", limit: int = 10):
