@@ -1,10 +1,7 @@
 import os
-from pathlib import Path
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -281,8 +278,6 @@ def build_tv(t):
 
 @app.get("/")
 async def index():
-    if FRONTEND_BUILD:
-        return FileResponse(str(FRONTEND_BUILD / "index.html"))
     return {"message": "MovieBox API - Live"}
 
 @app.get("/search")
@@ -436,16 +431,4 @@ def home_page():
         return result
     return get_fallback_home()
 
-FRONTEND_BUILD = None
-for p in [Path(__file__).parent.parent / "frontend" / "build",
-          Path(os.getcwd()) / "frontend" / "build",
-          Path("frontend") / "build"]:
-    if (p / "index.html").exists():
-        FRONTEND_BUILD = p
-        break
 
-if FRONTEND_BUILD:
-    app.mount("/static", StaticFiles(directory=str(FRONTEND_BUILD / "static")), name="static")
-    @app.get("/{full_path:path}")
-    async def serve_frontend(full_path: str):
-        return FileResponse(str(FRONTEND_BUILD / "index.html"))
