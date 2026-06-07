@@ -230,13 +230,25 @@ def tv_embed(tmdb_id, season, episode):
     ]
     return sources[0], sources
 
+def get_trailer_key(tid):
+    yt_key = FALLBACK_TRAILERS.get(tid)
+    if yt_key:
+        return yt_key
+    if TMDB_TOKEN:
+        v = tmdb_get(f"movie/{tid}/videos", {"language": "en-US"})
+        if v.get("results"):
+            for vid in v["results"]:
+                if vid.get("site") == "YouTube" and vid.get("type") == "Trailer":
+                    return vid["key"]
+    return None
+
 def build_movie(m):
     genres = []
     if "genre_ids" in m:
         id_to_name = {v: k for k, v in GENRE_IDS.items()}
         genres = [id_to_name.get(gid) for gid in m.get("genre_ids", []) if id_to_name.get(gid)]
     tid = m["id"]
-    yt_key = FALLBACK_TRAILERS.get(tid)
+    yt_key = get_trailer_key(tid)
     trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
     streaming = [
         f"https://vidsrc.to/embed/movie/{tid}",
@@ -264,14 +276,30 @@ def build_movie(m):
     }
     return item
 
+def get_tv_trailer_key(tid):
+    if TMDB_TOKEN:
+        v = tmdb_get(f"tv/{tid}/videos", {"language": "en-US"})
+        if v.get("results"):
+            for vid in v["results"]:
+                if vid.get("site") == "YouTube" and vid.get("type") == "Trailer":
+                    return vid["key"]
+    return None
+
 def build_tv(t):
     tid = t["id"]
+    yt_key = get_tv_trailer_key(tid)
+    trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
     streaming = [
         f"https://vidsrc.to/embed/tv/{tid}/1/1",
         f"https://www.2embed.cc/embed/{tid}?s=1&e=1",
         f"https://multiembed.mov/?video_id={tid}&tmdb=1&s=1&e=1",
         f"https://vidsrc.net/embed/tv/{tid}/1/1",
     ]
+    primary = trailer or streaming[0]
+    sources = []
+    if trailer:
+        sources.append(trailer)
+    sources.extend(streaming)
     item = {
         "id": tid,
         "title": t.get("name", ""),
@@ -282,8 +310,8 @@ def build_tv(t):
         "overview": t.get("overview", ""),
         "media_type": "tv",
         "genres": [],
-        "embed_url": streaming[0],
-        "embed_sources": streaming,
+        "embed_url": primary,
+        "embed_sources": sources,
     }
     return item
 
