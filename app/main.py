@@ -278,7 +278,7 @@ def build_tv(t):
 
 @app.get("/")
 async def index():
-    return {"message": "MovieBox API - Live"}
+    return {"message": "MovieBox API - Live", "note": "frontend at /index.html"}
 
 @app.get("/search")
 def search(q: str = "", limit: int = 10):
