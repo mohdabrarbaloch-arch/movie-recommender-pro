@@ -108,10 +108,10 @@ def build_fallback_movie(m, genre_ids_str="Drama"):
     yt_key = FALLBACK_TRAILERS.get(tid)
     trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
     streaming = [
-        f"https://embed.su/embed/movie/{tid}",
         f"https://vidsrc.to/embed/movie/{tid}",
         f"https://www.2embed.cc/embed/{tid}",
         f"https://multiembed.mov/?video_id={tid}&tmdb=1",
+        f"https://vidsrc.net/embed/movie/{tid}",
     ]
     primary = trailer or streaming[0]
     sources = []
@@ -135,10 +135,10 @@ def build_fallback_movie(m, genre_ids_str="Drama"):
 def build_fallback_tv(t):
     tid = t["id"]
     streaming = [
-        f"https://embed.su/embed/tv/{tid}/1/1",
         f"https://vidsrc.to/embed/tv/{tid}/1/1",
         f"https://www.2embed.cc/embed/{tid}?s=1&e=1",
         f"https://multiembed.mov/?video_id={tid}&tmdb=1&s=1&e=1",
+        f"https://vidsrc.net/embed/tv/{tid}/1/1",
     ]
     return {
         "id": t["id"],
@@ -209,10 +209,10 @@ def movie_embed(tmdb_id, imdb_id=None):
     yt_key = FALLBACK_TRAILERS.get(tmdb_id)
     trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
     streaming = [
-        f"https://embed.su/embed/movie/{tmdb_id}",
         f"https://vidsrc.to/embed/movie/{tmdb_id}",
         f"https://www.2embed.cc/embed/{tmdb_id}",
         f"https://multiembed.mov/?video_id={tmdb_id}&tmdb=1",
+        f"https://vidsrc.net/embed/movie/{tmdb_id}",
     ]
     primary = trailer or streaming[0]
     sources = []
@@ -223,10 +223,10 @@ def movie_embed(tmdb_id, imdb_id=None):
 
 def tv_embed(tmdb_id, season, episode):
     sources = [
-        f"https://embed.su/embed/tv/{tmdb_id}/{season}/{episode}",
         f"https://vidsrc.to/embed/tv/{tmdb_id}/{season}/{episode}",
         f"https://www.2embed.cc/embed/{tmdb_id}?s={season}&e={episode}",
         f"https://multiembed.mov/?video_id={tmdb_id}&tmdb=1&s={season}&e={episode}",
+        f"https://vidsrc.net/embed/tv/{tmdb_id}/{season}/{episode}",
     ]
     return sources[0], sources
 
@@ -239,10 +239,10 @@ def build_movie(m):
     yt_key = FALLBACK_TRAILERS.get(tid)
     trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
     streaming = [
-        f"https://embed.su/embed/movie/{tid}",
         f"https://vidsrc.to/embed/movie/{tid}",
         f"https://www.2embed.cc/embed/{tid}",
         f"https://multiembed.mov/?video_id={tid}&tmdb=1",
+        f"https://vidsrc.net/embed/movie/{tid}",
     ]
     primary = trailer or streaming[0]
     sources = []
@@ -267,10 +267,10 @@ def build_movie(m):
 def build_tv(t):
     tid = t["id"]
     streaming = [
-        f"https://embed.su/embed/tv/{tid}/1/1",
         f"https://vidsrc.to/embed/tv/{tid}/1/1",
         f"https://www.2embed.cc/embed/{tid}?s=1&e=1",
         f"https://multiembed.mov/?video_id={tid}&tmdb=1&s=1&e=1",
+        f"https://vidsrc.net/embed/tv/{tid}/1/1",
     ]
     item = {
         "id": tid,
