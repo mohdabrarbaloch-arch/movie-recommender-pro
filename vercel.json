@@ -12,8 +12,5 @@
     { "source": "/short-videos", "destination": "/api/index" },
     { "source": "/hero-content", "destination": "/api/index" },
     { "source": "/all-movies", "destination": "/api/index" }
-  ],
-  "outputDirectory": "frontend/build",
-  "cleanUrls": true,
-  "trailingSlash": false
+  ]
 }
