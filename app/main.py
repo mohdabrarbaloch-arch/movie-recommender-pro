@@ -97,7 +97,19 @@ FALLBACK_TRAILERS = {
 
 def build_fallback_movie(m, genre_ids_str="Drama"):
     tid = m["id"]
-    embed_url = f"https://www.youtube.com/embed/{FALLBACK_TRAILERS.get(tid, 'dQw4w9WgXcQ')}?autoplay=1"
+    yt_key = FALLBACK_TRAILERS.get(tid)
+    trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
+    streaming = [
+        f"https://embed.su/embed/movie/{tid}",
+        f"https://vidsrc.to/embed/movie/{tid}",
+        f"https://www.2embed.cc/embed/{tid}",
+        f"https://multiembed.mov/?video_id={tid}&tmdb=1",
+    ]
+    primary = trailer or streaming[0]
+    sources = []
+    if trailer:
+        sources.append(trailer)
+    sources.extend(streaming)
     return {
         "id": tid,
         "title": m["title"],
@@ -108,11 +120,18 @@ def build_fallback_movie(m, genre_ids_str="Drama"):
         "overview": m.get("overview", ""),
         "media_type": "movie",
         "genres": m.get("genres", [genre_ids_str]),
-        "embed_url": embed_url,
-        "embed_sources": [embed_url],
+        "embed_url": primary,
+        "embed_sources": sources,
     }
 
 def build_fallback_tv(t):
+    tid = t["id"]
+    streaming = [
+        f"https://embed.su/embed/tv/{tid}/1/1",
+        f"https://vidsrc.to/embed/tv/{tid}/1/1",
+        f"https://www.2embed.cc/embed/{tid}?s=1&e=1",
+        f"https://multiembed.mov/?video_id={tid}&tmdb=1&s=1&e=1",
+    ]
     return {
         "id": t["id"],
         "title": t["name"],
@@ -123,8 +142,8 @@ def build_fallback_tv(t):
         "overview": t.get("overview", ""),
         "media_type": "tv",
         "genres": t.get("genres", []),
-        "embed_url": f"https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
-        "embed_sources": [],
+        "embed_url": streaming[0],
+        "embed_sources": streaming,
     }
 
 FALLBACK_SECTIONS = [
@@ -180,15 +199,28 @@ def get_fallback_recommendations(content_id):
 
 def movie_embed(tmdb_id, imdb_id=None):
     yt_key = FALLBACK_TRAILERS.get(tmdb_id)
-    if yt_key:
-        primary = f"https://www.youtube.com/embed/{yt_key}?autoplay=1"
-        return primary, [primary]
-    primary = f"https://www.2embed.cc/embed/{tmdb_id}"
-    return primary, [primary, f"https://multiembed.mov/?video_id={tmdb_id}&tmdb=1"]
+    trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
+    streaming = [
+        f"https://embed.su/embed/movie/{tmdb_id}",
+        f"https://vidsrc.to/embed/movie/{tmdb_id}",
+        f"https://www.2embed.cc/embed/{tmdb_id}",
+        f"https://multiembed.mov/?video_id={tmdb_id}&tmdb=1",
+    ]
+    primary = trailer or streaming[0]
+    sources = []
+    if trailer:
+        sources.append(trailer)
+    sources.extend(streaming)
+    return primary, sources
 
 def tv_embed(tmdb_id, season, episode):
-    primary = f"https://www.2embed.cc/embed/{tmdb_id}?s={season}&e={episode}"
-    return primary, [primary, f"https://multiembed.mov/?video_id={tmdb_id}&tmdb=1&s={season}&e={episode}"]
+    sources = [
+        f"https://embed.su/embed/tv/{tmdb_id}/{season}/{episode}",
+        f"https://vidsrc.to/embed/tv/{tmdb_id}/{season}/{episode}",
+        f"https://www.2embed.cc/embed/{tmdb_id}?s={season}&e={episode}",
+        f"https://multiembed.mov/?video_id={tmdb_id}&tmdb=1&s={season}&e={episode}",
+    ]
+    return sources[0], sources
 
 def build_movie(m):
     genres = []
@@ -196,7 +228,19 @@ def build_movie(m):
         id_to_name = {v: k for k, v in GENRE_IDS.items()}
         genres = [id_to_name.get(gid) for gid in m.get("genre_ids", []) if id_to_name.get(gid)]
     tid = m["id"]
-    primary = f"https://www.youtube.com/embed/{FALLBACK_TRAILERS.get(tid, 'dQw4w9WgXcQ')}?autoplay=1"
+    yt_key = FALLBACK_TRAILERS.get(tid)
+    trailer = f"https://www.youtube.com/embed/{yt_key}?autoplay=1" if yt_key else None
+    streaming = [
+        f"https://embed.su/embed/movie/{tid}",
+        f"https://vidsrc.to/embed/movie/{tid}",
+        f"https://www.2embed.cc/embed/{tid}",
+        f"https://multiembed.mov/?video_id={tid}&tmdb=1",
+    ]
+    primary = trailer or streaming[0]
+    sources = []
+    if trailer:
+        sources.append(trailer)
+    sources.extend(streaming)
     item = {
         "id": tid,
         "title": m.get("title", ""),
@@ -208,13 +252,18 @@ def build_movie(m):
         "media_type": "movie",
         "genres": genres,
         "embed_url": primary,
-        "embed_sources": [primary],
+        "embed_sources": sources,
     }
     return item
 
 def build_tv(t):
     tid = t["id"]
-    primary = f"https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streaming = [
+        f"https://embed.su/embed/tv/{tid}/1/1",
+        f"https://vidsrc.to/embed/tv/{tid}/1/1",
+        f"https://www.2embed.cc/embed/{tid}?s=1&e=1",
+        f"https://multiembed.mov/?video_id={tid}&tmdb=1&s=1&e=1",
+    ]
     item = {
         "id": tid,
         "title": t.get("name", ""),
@@ -225,8 +274,8 @@ def build_tv(t):
         "overview": t.get("overview", ""),
         "media_type": "tv",
         "genres": [],
-        "embed_url": primary,
-        "embed_sources": [],
+        "embed_url": streaming[0],
+        "embed_sources": streaming,
     }
     return item
 

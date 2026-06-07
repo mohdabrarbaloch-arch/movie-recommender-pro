@@ -594,7 +594,7 @@ function App() {
                       className={`source-btn ${src === player.embed_url ? "active" : ""}`}
                       onClick={() => setPlayer({ ...player, embed_url: src })}
                     >
-                      Server {i + 1}
+                      {i === 0 && src.includes("youtube") ? "Trailer" : `Server ${i}`}
                     </button>
                   ))}
                 </div>
